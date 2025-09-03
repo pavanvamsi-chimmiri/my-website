@@ -1,12 +1,13 @@
 "use client"
 
-import { signIn, getSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Github, Mail } from "lucide-react"
 
 export default function SignInPage() {
   const [email, setEmail] = useState("")
@@ -33,9 +34,9 @@ export default function SignInPage() {
         router.push("/")
         router.refresh()
       }
-    } catch (error) {
-      setError("An error occurred. Please try again.")
-    } finally {
+         } catch {
+       setError("An error occurred. Please try again.")
+     } finally {
       setIsLoading(false)
     }
   }
@@ -45,8 +46,8 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="w-full max-w-md border shadow-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Sign In</CardTitle>
           <CardDescription className="text-center">
@@ -101,25 +102,25 @@ export default function SignInPage() {
                 onClick={() => handleOAuthSignIn("google")}
                 className="w-full"
               >
-                Google
+                <Mail className="mr-2 h-4 w-4" /> Continue with Google
               </Button>
               <Button
                 variant="outline"
                 onClick={() => handleOAuthSignIn("github")}
                 className="w-full"
               >
-                GitHub
+                <Github className="mr-2 h-4 w-4" /> Continue with GitHub
               </Button>
             </div>
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="/auth/signup" className="font-medium text-blue-600 hover:text-blue-500">
-                Sign up
-              </a>
-            </p>
+                         <p className="text-sm text-gray-600">
+               Don&apos;t have an account?{" "}
+               <a href="/auth/signup" className="font-medium text-blue-600 hover:text-blue-500">
+                 Sign up
+               </a>
+             </p>
           </div>
 
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">

@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
 import bcrypt from "bcryptjs"
-import { UserRole } from "@prisma/client"
+// Avoid importing Prisma enums in runtime code; use string unions instead
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -67,14 +67,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role
+        // NextAuth's `user` type doesn't include custom props; cast safely
+        token.role = (user as any).role ?? token.role
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.sub!
-        session.user.role = token.role as UserRole
+        session.user.role = token.role as "CUSTOMER" | "ADMIN" | "MODERATOR"
       }
       return session
     },
@@ -92,7 +93,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 email: user.email!,
                 name: user.name,
                 image: user.image,
-                role: UserRole.CUSTOMER,
+                role: "CUSTOMER",
                 emailVerified: new Date(),
               },
             })
